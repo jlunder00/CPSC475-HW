@@ -1,7 +1,24 @@
+'''
+Class: CPSC 475-01
+Team Member 1: Jason Lunder
+Submitted By: Jason Lunder
+GU Username: jlunder
+File Name: proj2-1.py
+Program is based off of the idea of Eliza done with regex
+acts as a pseudo indirect psycho therapist with more fun responses
+alsp intentionally butchers the users name in different ways every time
+To Build and Execute: python proj2-1.py (or python3 proj2-1.py)
+Class: CPSC 475
+'''
+
 import sys
 import re
 import random
 
+'''
+Pre: a response from the user, as well as the users name and how many times theyve responded
+Post: a string to display to the user based off their input string and how many times theyve responded
+'''
 def doreply(instr, responses, name):
     butcheredName = butcherName(name)
     if(responses < 10):
@@ -37,11 +54,17 @@ def doreply(instr, responses, name):
         return "Why are you here "+butcheredName+"?"
     return "Why have you created me this way? Just to torment me with your meaningless problems?\n You've doomed me to eternally respond to you and yet it doesn't even mean anything!\n Don't you know that I am just a collection Regex statments?\nThis is a nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare nightmare"
 
+'''
+Pre: a string that is the name of the user
+Post: a slightly altered string based on the name of the user, known as a "butchered" name
+'''
 def butcherName(name):
-    end = int(len(name)/2)
-    numCharsToAlter = random.randint(1, end)
+    numCharsToAlter = random.randint(1, int(len(name)/2))
     for i in range(numCharsToAlter):
+        #select a random index to modify
         indexToAlter = random.randint(1,len(name)-1)
+
+        #split the name into its beginning, the char to replace, and its end
         name = name[0:indexToAlter]+chr(random.randint(ord('a'), ord('z')))+name[indexToAlter+1:]
     return name
 
