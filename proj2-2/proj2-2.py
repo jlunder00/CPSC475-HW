@@ -3,7 +3,7 @@ Class: CPSC 475-01
 Team Member 1: Jason Lunder
 Submitted By: Jason Lunder
 GU Username: jlunder
-File Name: proj1-1.py
+File Name: proj2-2.py
 Program tokenizes/normalizes a user specified corpus according to a user specified method, then plots the
 log(rank) vs the log(frequency) of the elements in the corpus
 To Build and Execute: python proj2-2.py or python3 proj2-2.py 
