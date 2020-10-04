@@ -4,9 +4,9 @@ Team Member 1: Jason Lunder
 Submitted By: Jason Lunder
 GU Username: jlunder
 File Name: proj2-3.py
-Program tokenizes/normalizes a user specified corpus according to a user specified method, then plots the
-log(rank) vs the log(frequency) of the elements in the corpus
-To Build and Execute: python proj2-2.py or python3 proj2-2.py 
+Program tokenizes/normalizes a corpus generated from all the text files in a user specified directory
+according to a user specified method, then plots the log(rank) vs the log(frequency) of the elements in the corpus
+To Build and Execute: python proj2-3.py </directory name> <1-4> or python3 proj2-3.py </directory name> <1-4>
 (If your PATH and python bin are set up so python maps to python2, this program must be run with a version of python 3)
 '''
 
