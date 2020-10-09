@@ -1,21 +1,22 @@
 import sys
 import string
-import math
-import os
-import re
 
 
 
 def initializeFirstCol(distanceMatrix, rows, source):
-  distanceMatrix = [[distanceMatrix[i-1, 0] + del_cost(source[i]) for j in range(0, 1)] for i in range(1, rows)i]
+  distanceMatrix = [[distanceMatrix[i-1, 0] + del_cost(source[i]) for j in range(0, j)] for i in range(1, rows)]
+  
   for i in range(1, rows):
     distanceMatrix[i, 0] = distanceMatrix[i-1, 0] + del_cost(source[i])
+  
   return distanceMatrix
 
 def initializeFirstRow(distanceMatrix, collumns, source):
   distanceMatrix = [[distanceMatrix[0, j-1] + ins_cost(target[j]) for i in range(0, 1)] for j in range(1, columns)]
+  
   for i in range(1, columns):
     distanceMatrix[0, j] = distanceMatrix[0, j-1] + ins_cost(target[j])
+  
   return distanceMatrix
 
 def computeMinEditDistance(distanceMatrix, rows, columns, source, target):
