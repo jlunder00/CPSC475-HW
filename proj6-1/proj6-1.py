@@ -30,6 +30,7 @@ def getWordsToDelete():
     wordsToDelete = stopwords.words("english")
     wordsToDelete.append('<s>')
     wordsToDelete.append('</s>')
+    wordsToDelete.append('')
     return wordsToDelete
 
 def lemmatization(tokenizedSentences, wordsToDelete):
@@ -55,7 +56,7 @@ def tfidf_vectorize(doc1, doc2):
     vectors = vectorize.fit_transform([doc1, doc2])
     return pd.DataFrame(vectors.todense().tolist(), columns=vectorize.get_feature_names())
   
-def createFinalDictionary(words, vocabulary):
+def createFinalDictionary(words, vocabulary, ngrams):
     finalDictionary = {}
     for word in words:
         for w in vocabulary:
@@ -74,8 +75,12 @@ def createFinalDictionary(words, vocabulary):
 def vectorization(finalDictionary, words, vocabulary):
     vectorList = []
     for word in words:
-        vec = list(word.values())
-        vectorList.append(vector)
+        vec = []
+        for w in vocabulary:
+            print(w)
+            print(word)
+            vec.append(finalDictionary[word][w])
+        vectorList.append(vec)
     return vectorList
 
 """
@@ -98,18 +103,18 @@ def main():
     newData = document1+document2
     vocabulary = set(vocabulary1+vocabulary2)
 
-    documentFrequency = tfidf_vector(document1,document2)
+    documentFrequency = tfidf_vectorize(document1,document2)
 
     documentFrequency = documentFrequency[documentFrequency>0]
     documentFrequency.dropna(axis=1,inplace=True)
 
     words = documentFrequency.sum().sort_values(ascending=False).head(60).index
 
-    grams = nlp.makeNgram(newData,7)
+    grams = nlp.make_grams(newData,7)
 
-    finalDictionary = createFinalDictionary(words,vocabulary)
-
-    vectorDictionary = vectorize(finalDictionary, words, vocabulary)
+    finalDictionary = createFinalDictionary(words,vocabulary, grams)
+    print(finalDictionary)
+    vectorDictionary = vectorization(finalDictionary, words, vocabulary)
 
     distances = cdist(vectorDictionary, vectorDictionary, metric='cosine')
 

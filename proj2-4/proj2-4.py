@@ -4,7 +4,7 @@ import string
 
 
 def initializeFirstCol(distanceMatrix, rows, source):
-  distanceMatrix = [[distanceMatrix[i-1, 0] + del_cost(source[i]) for j in range(0, j)] for i in range(1, rows)]
+  distanceMatrix = [[distanceMatrix[i-1, 0] + del_cost(source[i]) for j in range(0, 1)] for i in range(1, rows)]
   
   for i in range(1, rows):
     distanceMatrix[i, 0] = distanceMatrix[i-1, 0] + del_cost(source[i])
@@ -20,18 +20,11 @@ def initializeFirstRow(distanceMatrix, collumns, source):
   return distanceMatrix
 
 def computeMinEditDistance(distanceMatrix, rows, columns, source, target):
-
-  distanceMatrix = [[MIN(
-                         distanceMatrix[i-1, j] + del_cost(source[i])
-                         distanceMatrix[i-1, j-1] + sub_cost(source[i], target[j])
-                         distanceMatrix[i, j-1] + ins_cost(source[j])
-                         ) for j in range(1, columns)] for i in range(1, rows)]
-
   for i in range(1, rows):
     for j in range(1, columns):
         distanceMatrix[i,j] = MIN(
-                                  distanceMatrix[i-1, j] + del_cost(source[i])
-                                  distanceMatrix[i-1, j-1] + sub_cost(source[i], target[j])
+                                  distanceMatrix[i-1, j] + del_cost(source[i]),
+                                  distanceMatrix[i-1, j-1] + sub_cost(source[i], target[j]),
                                   distanceMatrix[i, j-1] + ins_cost(source[j])
                                   )
   return distanceMatrix[n,m]
@@ -45,10 +38,6 @@ def ins_cost(char):
 
 def sub_cost(src, trgt):
   return (src != trgt) ? 2 : 0
-
-
-
-
 
 
 
