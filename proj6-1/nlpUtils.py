@@ -51,6 +51,7 @@ Pre: a list of the sentences in the corpus that has been tokenized
 Post: a list of the words in the corpus divided into ngrams
 """
 def make_grams(sent_lst, gram_size):
+  #print([sent for sent in sent_lst])
   unflattenedList = [[sent.split(" ")[wordIndex+i] for i in range(0, gram_size)] for sent in sent_lst for wordIndex in range(0, len(sent.split(" "))-int(gram_size))]
   flattenedList = [nGram[i] for nGram in unflattenedList for i in range(0, gram_size)]
   return flattenedList

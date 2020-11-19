@@ -1,3 +1,4 @@
+import sys
 import nltk
 import pandas as pd
 nltk.download('stopwords')
@@ -31,6 +32,7 @@ def getWordsToDelete():
     wordsToDelete.append('<s>')
     wordsToDelete.append('</s>')
     wordsToDelete.append('')
+    wordsToDelete.append('-')
     return wordsToDelete
 
 def lemmatization(tokenizedSentences, wordsToDelete):
@@ -42,10 +44,12 @@ def lemmatization(tokenizedSentences, wordsToDelete):
         for word in sentence:
             if word not in wordsToDelete:
                 word = nlp.lemmatize(word)
-                vocabulary.append(word[:-1])
-                newSentence = newSentence+word
-        newSentences.append(newSentence)
-    vocabulary = list(set(vocabulary))
+                if(word != ''):
+                    vocabulary.append(word[:-1])
+                    newSentence = newSentence+word+' '
+        if(newSentence != ''):
+            newSentences.append(newSentence[:-1])
+    vocabulary = list(set(vocabulary))[1:-1]
     return vocabulary, newSentences
 
 def tfidf_vectorize(doc1, doc2):
@@ -58,17 +62,27 @@ def tfidf_vectorize(doc1, doc2):
   
 def createFinalDictionary(words, vocabulary, ngrams):
     finalDictionary = {}
+    print("words:\n\n\n")
+    print(words)
+    print("vocabulary:\n\n\n")
+    print(vocabulary)
     for word in words:
         for w in vocabulary:
-            finalDictionary[word] = {}
+           finalDictionary[word] = {}
+
+    for word in words:
+        for w in vocabulary:
             finalDictionary[word][w] = 0
-    
+    print(finalDictionary)
+    print("Creating Final Dict")
     for ngram in ngrams:
         ngram = ngram.split()
         for word in ngram:
             if word in words:
                 for w in vocabulary:
                     if w in ngram:
+                        print("word: "+word)
+                        print("w: "+w)
                         finalDictionary[word][w] = finalDictionary[word][w]+1
     return finalDictionary
 
@@ -77,8 +91,6 @@ def vectorization(finalDictionary, words, vocabulary):
     for word in words:
         vec = []
         for w in vocabulary:
-            print(w)
-            print(word)
             vec.append(finalDictionary[word][w])
         vectorList.append(vec)
     return vectorList
@@ -91,7 +103,7 @@ def make_grams(sent_lst, gram_size):
   return [[sent.split(" ")[wordIndex+i] for i in range(0, gram_size)] for sent in sent_lst for wordIndex in range(0, len(sent.split(" "))-int(gram_size))]
 
 def main():
-    data = nlp.tokenize(nlp.getData('BeeMovieScript.txt'))
+    data = nlp.tokenize(nlp.getData(sys.argv[1]))
 
     document1 = data[:int(len(data)/2)]
     document2 = data[int(len(data)/2):]
@@ -108,21 +120,21 @@ def main():
     documentFrequency = documentFrequency[documentFrequency>0]
     documentFrequency.dropna(axis=1,inplace=True)
 
-    words = documentFrequency.sum().sort_values(ascending=False).head(60).index
+    words = documentFrequency.sum().sort_values(ascending=False).head(20).index
 
-    grams = nlp.make_grams(newData,7)
-
+    grams = nlp.make_grams(newData,4)
     finalDictionary = createFinalDictionary(words,vocabulary, grams)
-    print(finalDictionary)
     vectorDictionary = vectorization(finalDictionary, words, vocabulary)
 
-    distances = cdist(vectorDictionary, vectorDictionary, metric='cosine')
+    distances = cdist(vectorDictionary, vectorDictionary, metric='euclidean')
 
     docFreq = pd.DataFrame(data=distances, index=words, columns=words)
 
     x = docFreq.values #returns a numpy array
+    print(x)
     min_max_scaler = preprocessing.MinMaxScaler()
     x_scaled = min_max_scaler.fit_transform(x)
     docFreq = pd.DataFrame(x_scaled,index=words, columns=words)
+    docFreq.to_csv(r'./data.csv')
 
 main()
